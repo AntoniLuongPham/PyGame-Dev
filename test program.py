@@ -1,5 +1,2 @@
 print("Hello")
-#r = (""
-#      "")
-#print(r)
-#print("Hello")
+print("Git tutorial")
