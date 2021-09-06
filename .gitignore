@@ -1,3 +1,5 @@
 # Python
+.mypy_cache/
 *.pyc
 __pycache__/
+.ropeproject/
