@@ -1,1 +1,1 @@
-# STEAM for Viet Nam's CS201 "Modern Web Application Development"
+# STEAM for Viet Nam's CS102 "Conquer the Magical STEAM Valley with PyGame", Summer 2022
