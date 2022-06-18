@@ -3,6 +3,7 @@
 
   "files.exclude": {
     "**/.git": true,
+    "**/.idea": true,
     "**/.mypy_cache": true,
     "**/__pycache__": true,
     "**/.pytest_cache": true,
