@@ -1,5 +1,9 @@
 # Python
 .mypy_cache/
-*.pyc
 __pycache__/
+.pytest_cache/
 .ropeproject/
+
+# IntelliJ IDEA / PyCharm
+.idea/
+*.iml
