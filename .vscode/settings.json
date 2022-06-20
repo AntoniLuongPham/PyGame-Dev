@@ -14,14 +14,20 @@
 
   "python.linting.pylintEnabled": true,
   "python.linting.pylintArgs": [
+    "--disable", "invalid-name",
     "--disable", "missing-class-docstring",
     "--disable", "missing-function-docstring",
     "--disable", "missing-module-docstring",
+    "--disable", "no-member",
+    "--disable", "no-name-in-module",
     "--disable", "redefined-builtin",
+    "--disable", "redefined-outer-name",
+    "--disable", "too-many-arguments",
   ],
 
   "python.linting.flake8Enabled": true,
   "python.linting.flake8Args": [
+    "--ignore=E501",
   ],
 
   "python.linting.mypyEnabled": false,
@@ -30,12 +36,14 @@
 
   "python.linting.pycodestyleEnabled": true,
   "python.linting.pycodestyleArgs": [
+    "--ignore=E501",
   ],
 
   "python.linting.prospectorEnabled": true,
 
   "python.linting.pylamaEnabled": true,
   "python.linting.pylamaArgs": [
+    "--ignore=C901",
   ],
 
   "python.linting.banditEnabled": true,
