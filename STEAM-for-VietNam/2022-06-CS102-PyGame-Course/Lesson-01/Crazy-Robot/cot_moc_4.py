@@ -170,7 +170,7 @@ class GameState:
 
     def update_score(self, score: int) -> None:
         self.score = score
-        self.score_text: Surface = FREESANSBOLD_24.render("Score: %d" % score, True, BLUE)
+        self.score_text: Surface = FREESANSBOLD_24.render(f"Score: {score}", True, BLUE)
 
     def render(self, screen: Surface) -> None:
         # Score Text Render on Top Left Corner
