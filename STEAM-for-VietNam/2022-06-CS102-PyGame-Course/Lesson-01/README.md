@@ -1,1 +1,1 @@
-# Bài học số #1
+# Bài học số #1: Khai giảng
