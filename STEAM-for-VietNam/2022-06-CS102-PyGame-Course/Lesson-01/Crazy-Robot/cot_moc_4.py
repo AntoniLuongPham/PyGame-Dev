@@ -204,12 +204,18 @@ list_robot: List[Robot] = [
     Robot(500, 500, 1, 1),
     Robot(50, 50, -2, 2),
     Robot(500, 50, 3, 5),
+    Robot(500, 100, 9, 5),
+    Robot(500, 50, 3, 10),
+    Robot(500, 10, -8, 1)
 ]
 
 list_item: List[GameItem] = [
     GameItem(600, 500, ItemType.DIAMOND_BLUE),
     GameItem(800, 500, ItemType.DIAMOND_RED),
     GameItem(1000, 400, ItemType.DIAMOND_RED),
+    GameItem(100, 500, ItemType.DIAMOND_BLUE),
+    GameItem(880, 700, ItemType.DIAMOND_RED),
+    GameItem(500, 400, ItemType.DIAMOND_RED),
 ]
 
 to_mo: NPC = NPC(1000, 50)
