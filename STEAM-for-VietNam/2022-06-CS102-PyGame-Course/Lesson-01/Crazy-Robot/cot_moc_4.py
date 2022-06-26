@@ -1,6 +1,9 @@
 from typing import List
 import pygame
-from common import WHITE, BACKGROUND_SPRITE, FPS, screen, clock
+from common import (
+    ROBOT_SPRITE, TO_MO_SPRITE, PLAYER_SPRITE,
+    WHITE, BACKGROUND_SPRITE, FPS, screen, clock
+)
 from entities import (
     Player, Robot,
     GameItem, ItemType, NPC, GameState, GameStateType,
@@ -9,15 +12,15 @@ from utils import overlap
 
 
 # Game States:
-player: Player = Player(350, 200)
+player = Player(350, 200, PLAYER_SPRITE)
 
 list_robot: List[Robot] = [
-    Robot(500, 500, 1, 1),
-    Robot(50, 50, -2, 2),
-    Robot(50, 10, 3, 5),
-    Robot(500, 0, 9, 5),
-    Robot(100, 50, 3, 10),
-    Robot(590, 10, -8, 1)
+    Robot(500, 500, 1, 1, ROBOT_SPRITE),
+    Robot(50, 50, -2, 2, ROBOT_SPRITE),
+    Robot(50, 10, 3, 5, ROBOT_SPRITE),
+    Robot(500, 0, 9, 5, ROBOT_SPRITE),
+    Robot(100, 50, 3, 10, ROBOT_SPRITE),
+    Robot(590, 10, -8, 1, ROBOT_SPRITE)
 ]
 
 list_item: List[GameItem] = [
@@ -29,7 +32,7 @@ list_item: List[GameItem] = [
     GameItem(500, 400, ItemType.DIAMOND_RED),
 ]
 
-to_mo: NPC = NPC(1000, 50)
+to_mo: NPC = NPC(1000, 50, TO_MO_SPRITE)
 
 # Bắt đầu game
 game_state: GameState = GameState(score=0)

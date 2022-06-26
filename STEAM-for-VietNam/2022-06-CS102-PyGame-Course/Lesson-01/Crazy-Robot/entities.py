@@ -2,19 +2,24 @@ import enum
 import pygame
 from pygame import Surface
 from common import (
-    PLAYER_SPRITE, SCREEN_HEIGHT,
-    SCREEN_WIDTH, ROBOT_SPRITE, RED,
-    GameStateType, TO_MO_SPRITE, FREESANSBOLD_24,
+    SCREEN_HEIGHT,
+    SCREEN_WIDTH, RED,
+    GameStateType, FREESANSBOLD_24,
     DIAMOND_RED_SPRITE, DIAMOND_BLUE_SPRITE, FREESANSBOLD_48, BLUE
 )
 
 
-class Player:
-    def __init__(self, x: float, y: float) -> None:
-        self.x: float = x
-        self.y: float = y
-        self.image: Surface = PLAYER_SPRITE
+class BaseEntity:
+    def __init__(self, x: int, y: int, image: Surface) -> None:
+        self.x: int = x
+        self.y: int = y
+        self.image = image
 
+    def render(self, screen: Surface) -> None:
+        screen.blit(self.image, (self.x, self.y))
+
+
+class Player(BaseEntity):
     def _move(self, dx: int, dy: int):
         new_x = self.x + dx
         new_y = self.y + dy
@@ -35,15 +40,11 @@ class Player:
         if pressed[pygame.K_RIGHT] or pressed[pygame.K_d]:
             self._move(10, 0)
 
-    def render(self, screen: Surface) -> None:
-        screen.blit(self.image, (self.x, self.y))
 
-
-class Robot:
-    def __init__(self, x: float, y: float, x_heading: float, y_heading: float) -> None:
-        self.x: float = x
-        self.y: float = y
-        self.image: Surface = ROBOT_SPRITE
+class Robot(BaseEntity):
+    def __init__(
+            self, x: float, y: float, x_heading: float, y_heading: float, image: Surface) -> None:
+        super().__init__(x, y, image)
         self.x_heading: float = x_heading
         self.y_heading: float = y_heading
 
@@ -60,18 +61,9 @@ class Robot:
         if self.y < 0:
             self.y_heading = -self.y_heading
 
-    def render(self, screen: Surface) -> None:
-        screen.blit(self.image, (self.x, self.y))
 
-
-class NPC:
-    def __init__(self, x: float, y: float) -> None:
-        self.x: float = x
-        self.y: float = y
-        self.image: Surface = TO_MO_SPRITE
-
-    def render(self, screen: Surface) -> None:
-        screen.blit(self.image, (self.x, self.y))
+class NPC(BaseEntity):
+    ...
 
 
 class ItemType(enum.Enum):
