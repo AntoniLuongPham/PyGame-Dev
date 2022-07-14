@@ -8,7 +8,7 @@ var house = {
     address: "1783 Gable Lane"
 }
 
-function GetReadyToGoToBed() {
+function GetReadyToGoToBed(){
     self.go_to("bathroom");
     house.turn_lights("on", "bathroom");
     self.take_clothes_off();
@@ -26,4 +26,4 @@ function GetReadyToGoToBed() {
     house.turn_lights("off", "bedroom");
 }
 
-GetReadyToGoToBed()
+GetReadyToGoToBed();
