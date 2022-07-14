@@ -23,7 +23,7 @@ class GameConfig:
     HEIGHT: int = 768
     GRAVITY: int = 2
 
-    BG_OFFICE_PATH: Path = ASSET_DIR / "bg_office_1.png"
+    BG_OFFICE_PATH: Path = ASSET_DIR / "background.png"
 
     GROUND_LEVEL: int = 730
 
