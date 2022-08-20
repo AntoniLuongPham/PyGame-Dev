@@ -1,1 +1,2 @@
 PyGame >= 2.1.2
+PyGame-Menu >= 4.2.8
