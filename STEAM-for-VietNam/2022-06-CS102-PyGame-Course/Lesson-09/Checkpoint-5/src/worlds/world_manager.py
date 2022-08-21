@@ -58,5 +58,6 @@ class WorldManager:
             self.level_id = level_id
             self.worlds[self.active_world] = World(self.screen, level_id=level_id)
 
-            # TODO: this could be optimized instead of initiating a new Menu instance somehow?
+            # TODO: this could be optimized instead of initiating a new Menu
+            # instance somehow?
             self.worlds[self.WORLD_MENU] = Menu(self.screen, can_resume=True)

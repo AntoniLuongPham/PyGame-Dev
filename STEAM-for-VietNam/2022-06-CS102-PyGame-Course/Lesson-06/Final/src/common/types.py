@@ -13,6 +13,7 @@ class EntityType(enum.Enum):
     GROUND = 1
 
     PLAYER = 20
+    SHADOW = 21
 
     # Collectable Items 60 -> 79
     CANDY = 60

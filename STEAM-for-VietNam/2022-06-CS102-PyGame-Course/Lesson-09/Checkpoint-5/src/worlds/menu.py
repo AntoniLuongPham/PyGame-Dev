@@ -1,9 +1,8 @@
 from functools import partial
 from typing import Sequence
-
+from pygame.surface import Surface
 import pygame
 import pygame_menu
-from pygame.surface import Surface
 
 from common.event import EventType, GameEvent
 from config import GameConfig
