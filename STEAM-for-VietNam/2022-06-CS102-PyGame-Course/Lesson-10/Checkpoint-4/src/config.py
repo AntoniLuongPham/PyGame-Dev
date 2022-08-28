@@ -95,20 +95,18 @@ class PlayerInventoryConfig:
 
     TILE_SIZE: int = 34
 
+class PlayerBulletConfig:
+    SPRITE_PATH: Path = ASSET_DIR / "items" / "player_bullet.png"
+    SCALE: float = 0.7
+    SPEED: int = 35
+    GRAVITY: int = 2
+    DAMAGE: int = 10
 
-# <-- COT MOC 4 -->
-# class PlayerBulletConfig:
-#     SPRITE_PATH: Path = ASSET_DIR / "items" / "player_bullet.png"
-#     SCALE: float = 0.7
-#     SPEED: int = 35
-#     GRAVITY: int = 2
-#     DAMAGE: int = 10
 
-#     # initial vertical movement
-#     INIT_DY: int = -10
+    INIT_DY: int = -10
 
-#     # the time between creation and deletion of entities of this type
-#     TTL_MS: int = 400 * 60 // GameConfig.FPS
+
+    TTL_MS: int = 400 * 60 // GameConfig.FPS
 
 
 class ShadowConfig:
