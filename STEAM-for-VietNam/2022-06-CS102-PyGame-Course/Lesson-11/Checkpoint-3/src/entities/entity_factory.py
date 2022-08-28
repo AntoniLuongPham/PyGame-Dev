@@ -8,6 +8,7 @@ from config import (
     NpcConfig,
     PlayerBulletConfig,
     PlayerConfig,
+    PlayerHpConfig,
     PlayerInventoryConfig,
     ShadowBossConfig,
     ShadowConfig,
@@ -18,6 +19,7 @@ from entities.bullet import Bullet
 from entities.dialogue_box import DialogueBox
 from entities.friendly_npc import FriendlyNpc
 from entities.player import Player
+from entities.player_hp import PlayerHp
 from entities.player_inventory import PlayerInventory
 from entities.shadow import Shadow
 from entities.shadow_alpha import ShadowAlpha
@@ -51,6 +53,12 @@ class EntityFactory:
                 sprite_path=PlayerConfig.SPRITE_PATH,
                 scale=PlayerConfig.SCALE,
                 animation_interval_ms=PlayerConfig.ANIMATION_INTERVAL_MS,
+            )
+        elif entity_type == EntityType.PLAYER_HP:
+            return PlayerHp(
+                entity_type=entity_type,
+                x=PlayerHpConfig.X,
+                y=PlayerHpConfig.Y,
             )
         elif entity_type == EntityType.PLAYER_INVENTORY:
             return PlayerInventory(
@@ -105,6 +113,7 @@ class EntityFactory:
                 speed=ShadowBossConfig.SPEED,
                 damage=ShadowBossConfig.DAMAGE,
             )
+
         elif entity_type in FRIENDLY_NPC_TYPES:
             config: NpcConfig = NpcConfig(entity_type=entity_type)
             return FriendlyNpc(
