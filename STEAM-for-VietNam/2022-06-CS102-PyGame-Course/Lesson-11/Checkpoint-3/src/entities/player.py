@@ -8,7 +8,7 @@ from common import util
 from common.event import EventType, GameEvent
 from common.types import ActionType, EntityType
 from common.util import now
-from config import GameConfig, PlayerConfig, TrampolineConfig
+from config import GameConfig, PlayerConfig, PlayerHpConfig, TrampolineConfig
 from entities.animated_entity import AnimatedEntity
 from entities.friendly_npc import FriendlyNpc
 from entities.trampoline import Trampoline
@@ -30,11 +30,8 @@ class Player(AnimatedEntity):
         self.talking: bool = False
         self.inventory: List = []
         self.inventory_entity_id: Optional[int] = None
-        self.hp: int = PlayerConfig.INITIAL_HP
-        self.max_hp: int = PlayerConfig.INITIAL_HP
-        self.hp_entity_id: Optional[int] = None
-
-        self.last_hit_t: int = 0
+        self.hp = PlayerConfig.MAX_HP
+        self.last_hit_t = now()
 
     def get_x_y_w_h(self) -> tuple:
         """Slightly narrow down the Player rectangle since the head is too big."""
@@ -52,14 +49,20 @@ class Player(AnimatedEntity):
         self._maybe_jump_with_trampoline()
 
         # Manage the dependent entities.
-        self._update_hp_entity()
         self._update_inventory_entity()
-
         self._handle_get_hit()
+
+    def _handle_get_hit(self) -> None:
+        for shadow in self.world.get_entities(EntityType.SHADOW):
+            if self.collide(shadow):
+                self._take_damage(1)
+
+    def _take_damage(self, damage: int) -> None:
+        if now() - self.last_hit_t > PlayerConfig.INVULNERABLE_DURATION_MS:
+            self.last_hit_t = now()
+            self.hp -= damage
+
         if self.hp <= 0:
-            self.die()
-        if self.rect.top > GameConfig.HEIGHT:
-            GameEvent(EventType.FALL, sender_type=self.entity_type).post()
             self.die()
 
     def count_inventory(self, entity_types: Iterable[EntityType] = tuple()) -> int:
@@ -81,17 +84,6 @@ class Player(AnimatedEntity):
         self.inventory = [
             entity for entity in self.inventory if entity.entity_type not in entity_types
         ]
-
-    def _update_hp_entity(self):
-        """
-        This Player entity directly manages a PlayerHp entity.
-        """
-        # Cap the HP to self.max_hp
-        self.hp = min(self.hp, self.max_hp)
-
-        if not self.hp_entity_id:
-            self.hp_entity_id = self.world.add_entity(EntityType.PLAYER_HP)
-        self.world.get_entity(self.hp_entity_id).set_hp(self.max_hp, self.hp)
 
     def _update_inventory_entity(self):
         """
@@ -177,21 +169,6 @@ class Player(AnimatedEntity):
         else:
             ball.move_right()
 
-    def _handle_get_hit(self):
-        for shadow in self.world.get_entities(EntityType.SHADOW):
-            if self.collide(shadow):
-                self._take_damage(shadow.damage)
-
-    def _take_damage(self, damage: int):
-        now_ms = now()
-        if now_ms - self.last_hit_t < PlayerConfig.INVULNERABLE_DURATION_MS:
-            return
-        else:
-            self.stop()
-            self.last_hit_t = now_ms
-            logger.debug(f"Player HP: {self.hp} -> {self.hp - damage}")
-            self.hp -= damage
-
     def _update_screen_offset(self):
         """Logics for horizontal world scroll based on player movement"""
         delta_screen_offset = 0
@@ -221,3 +198,18 @@ class Player(AnimatedEntity):
                     ActionType.ANIMATE, duration_ms=TrampolineConfig.ANIMATION_DURATION_MS
                 )
                 self.jump_with_trampoline()
+
+    def render(self, screen: pygame.Surface, *args, **kwargs):
+        super().render(screen, *args, **kwargs)
+
+        for i in range(0, PlayerConfig.MAX_HP):
+            if i < self.hp:
+                screen.blit(
+                    pygame.image.load(PlayerHpConfig.FULL_HEART_PATH),
+                    (PlayerHpConfig.X + i * PlayerHpConfig.X_STEP, PlayerHpConfig.Y),
+                )
+            else:
+                screen.blit(
+                    pygame.image.load(PlayerHpConfig.EMPTY_HEART_PATH),
+                    (PlayerHpConfig.X + i * PlayerHpConfig.X_STEP, PlayerHpConfig.Y),
+                )

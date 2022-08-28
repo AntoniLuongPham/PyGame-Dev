@@ -9,7 +9,6 @@ from config import GameConfig
 from worlds.bonus_level_end import BonusLevelEnd
 from worlds.defeated import Defeated
 from worlds.menu import Menu
-from worlds.victory import Victory
 from worlds.world import World
 
 logger = get_logger(__name__)
@@ -55,6 +54,10 @@ class WorldManager:
                 self.level_id = None
                 self.worlds[Menu.__name__] = Menu(self.screen, can_resume=False)
 
+            elif e.is_type(EventType.DIE) and e.get_sender_type() == EntityType.PLAYER:
+                logger.info("Player is dead!")
+                self.start_scene(Defeated)
+
             elif e.is_type(EventType.LEVEL_END):
                 e.event.level_id = self.level_id
                 if self.level_id < 10:
@@ -63,14 +66,6 @@ class WorldManager:
                 else:
                     # Player finishes a bonus level, show a congrats screen
                     self.start_scene(BonusLevelEnd)
-
-            elif e.is_type(EventType.DIE) and e.get_sender_type() == EntityType.PLAYER:
-                logger.info("Player is dead!")
-                self.start_scene(Defeated)
-
-            elif e.is_type(EventType.VICTORY):
-                logger.info("Game ENDED!")
-                self.start_scene(Victory)
 
             elif e.is_type(EventType.TOGGLE_SOUND):
                 self.toggle_sound()
