@@ -4,6 +4,7 @@ import random
 from common import util
 from common.event import EventType, GameEvent
 from common.types import ActionType, EntityType
+from common.util import now
 from config import Color, ShadowBossConfig
 from entities.bullet import Bullet
 from entities.shadow import Shadow
@@ -20,18 +21,20 @@ class ShadowBoss(Shadow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.hp = ShadowBossConfig.INITIAL_HP
-        self.recent_action_started_at[ActionType.ANGRY] = util.now()
+        self.is_angry = False
+        self.last_angry_t = now()
 
-    def _update_action(self):
-        if self.set_action(
-            ActionType.ANGRY,
-            duration_ms=ShadowBossConfig.ANGRY_DURATION_MS,
-            interval_ms=ShadowBossConfig.ANGRY_INTERVAL_MS,
-        ):
-            self._get_angry()
-        super()._update_action()
+    def update(self, screen, *args, **kwargs) -> None:
+        super().update(screen, *args, **kwargs)
 
-    def _get_angry(self):
+        # Boss Angry
+        if now() - self.last_angry_t > ShadowBossConfig.ANGRY_INTERVAL_MS:
+            self.is_angry = True
+            self.last_angry_t = now()
+            self.set_action(ActionType.ANGRY, duration_ms=ShadowBossConfig.ANGRY_DURATION_MS)
+            self._shoot_bullet()
+
+    def _shoot_bullet(self):
         for _ in range(10):
             bullet_id = self.world.add_entity(
                 EntityType.SHADOW_BULLET,
@@ -45,6 +48,8 @@ class ShadowBoss(Shadow):
     def _take_damage(self, damage: int):
         self.hp -= damage
         self.start_hurt(duration_ms=ShadowBossConfig.HURT_DURATION_MS)
+        if self.hp <= 0:
+            self.die()
 
     def _handle_get_hit(self):
         bullet: Bullet
@@ -56,9 +61,6 @@ class ShadowBoss(Shadow):
                 self.world.remove_entity(bullet.id)
 
                 self._take_damage(bullet.damage)
-
-                if self.hp <= 0:
-                    self.die()
 
     def render(self, screen, *args, **kwargs) -> None:
         super().render(screen, *args, **kwargs)
@@ -85,4 +87,5 @@ class ShadowBoss(Shadow):
             )
 
     def __del__(self):
-        GameEvent(EventType.VICTORY).post()
+        if self.hp <= 0:
+            GameEvent(EventType.VICTORY).post()
