@@ -22,6 +22,8 @@ class ShadowBoss(Shadow):
 
     def _take_damage(self, damage: int):
         self.hp -= damage
+        if self.hp <= 0:
+            self.die()
 
     def _handle_get_hit(self):
         bullet: Bullet
@@ -33,9 +35,6 @@ class ShadowBoss(Shadow):
                 self.world.remove_entity(bullet.id)
 
                 self._take_damage(bullet.damage)
-
-                if self.hp <= 0:
-                    self.die()
 
     def render(self, screen, *args, **kwargs) -> None:
         super().render(screen, *args, **kwargs)
@@ -62,4 +61,5 @@ class ShadowBoss(Shadow):
             )
 
     def __del__(self):
-        GameEvent(EventType.VICTORY).post()
+        if self.hp <= 0:
+            GameEvent(EventType.VICTORY).post()
